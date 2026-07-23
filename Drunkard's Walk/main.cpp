@@ -2,11 +2,6 @@
 #include <string>
 #include "LevelGenerator.h"
 
-// the desired height and width of the screen
-int height = 10;
-int width = 20;
-std::string levelRender;
-
 void drawLevel(int width, std::vector<int> level)
 {
     // loops for the number of the tiles
@@ -25,9 +20,20 @@ void drawLevel(int width, std::vector<int> level)
 int main()
 {
     LevelGenerator generator;
-    std::vector<int> level = generator.generateLevel(width, height);
+    // the desired height and width of the screen
+    int height;
+    int width;
+    int steps;
+
+    std::cout << "Width: ";
+    std::cin >> width;
+    std::cout << "Height: ";
+    std::cin >> height;
+    std::cout << "Steps: ";
+    std::cin >> steps;
+
+    std::vector<int> level = generator.generateLevel(width, height, steps);
 
     drawLevel(width, level);
-    system("pause");
     return 0;
 }

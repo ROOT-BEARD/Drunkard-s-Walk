@@ -16,7 +16,7 @@ int LevelGenerator::generateNum()
 
 /* generates a level layout within the width and height of the desired level in tiles
 (ex, 320pixel height level of 32 pixel tiles would be a height of 10).*/
-std::vector<int> LevelGenerator::generateLevel(int width, int height)
+std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
 {
     if (width <= 0 || height <= 0)
     {
@@ -27,10 +27,9 @@ std::vector<int> LevelGenerator::generateLevel(int width, int height)
     // starts in the center
     Vector2 walkerPos = {width / 2, height / 2};
     // the amount of time the drunkard will move
-    int reps = 75;
     // the starting pos of the dunkard
-    // loop for the number of reps
-    for (int i = 0; i < reps; i++)
+    // loop for the number of steps
+    for (int i = 0; i < steps; i++)
     {
         // makes the current position of the dunkard into an open spot
         level[(walkerPos.y * width) + walkerPos.x] = 1;

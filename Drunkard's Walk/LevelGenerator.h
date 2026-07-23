@@ -15,7 +15,7 @@ private:
     int generateNum();
 
 public:
-    std::vector<int> generateLevel(int width, int height);
+    std::vector<int> generateLevel(int width, int height, int steps);
 };
 
 #endif
