@@ -12,7 +12,8 @@ struct Vector2
 class LevelGenerator
 {
 private:
-    int generateNum();
+    int generateNum(const std::vector<float> &bias);
+    std::vector<float> generateBias(int lastDir, float biaScale);
 
 public:
     std::vector<int> generateLevel(int width, int height, int steps);

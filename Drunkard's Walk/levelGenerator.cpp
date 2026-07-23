@@ -4,14 +4,41 @@
 #include <vector>
 
 // generates and returns a random int between 1 and 4
-int LevelGenerator::generateNum()
+int LevelGenerator::generateNum(const std::vector<float> &bias)
 {
     // random number generation
     static std::random_device rng;
     static auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     static std::mt19937 gen(rng() ^ seed);
-    static std::uniform_int_distribution<int> moveDist(1, 4);
-    return moveDist(gen);
+    std::discrete_distribution<int> moveDist(bias.begin(), bias.end()); /*1 = up, 2 = down, 3 = left, 4 = right*/
+    return moveDist(gen) + 1;
+}
+
+std::vector<float> LevelGenerator::generateBias(int lastDir, float biaScale)
+{
+
+    float upBias = 1;
+    float downBias = 1;
+    float leftBias = 1;
+    float rightBias = 1;
+
+    switch (lastDir)
+    {
+    case 1:
+        downBias = biaScale;
+        break;
+    case 2:
+        upBias = biaScale;
+        break;
+    case 3:
+        rightBias = biaScale;
+        break;
+    case 4:
+        leftBias = biaScale;
+        break;
+    }
+
+    return {upBias, downBias, leftBias, rightBias};
 }
 
 /* generates a level layout within the width and height of the desired level in tiles
@@ -29,16 +56,16 @@ std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
     // the amount of time the drunkard will move
     // the starting pos of the dunkard
     // loop for the number of steps
+
+    std::vector<float> bias = {1, 1, 1, 1};
+    int dir;
     for (int i = 0; i < steps; i++)
     {
-        // makes the current position of the dunkard into an open spot
-        level[(walkerPos.y * width) + walkerPos.x] = 1;
         bool vaildMove = false;
         while (!vaildMove)
         {
             // gets a random number 1-4
-            int dir = generateNum();
-            vaildMove = true;
+            dir = generateNum(bias);
             /*1 = up, 2 = down, 3 = left, 4 = right*/
             switch (dir)
             {
@@ -46,31 +73,35 @@ std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
                 if (walkerPos.y > 0)
                 {
                     walkerPos.y -= 1;
+                    vaildMove = true;
                 }
                 break;
             case 2:
                 if (walkerPos.y < height - 1)
                 {
                     walkerPos.y += 1;
+                    vaildMove = true;
                 }
                 break;
             case 3:
                 if (walkerPos.x > 0)
                 {
                     walkerPos.x -= 1;
+                    vaildMove = true;
                 }
                 break;
             case 4:
                 if (walkerPos.x < width - 1)
                 {
                     walkerPos.x += 1;
+                    vaildMove = true;
                 }
-                break;
-            default:
-                vaildMove = false;
                 break;
             }
         }
+        // makes the current position of the dunkard into an open spot
+        level[(walkerPos.y * width) + walkerPos.x] = 1;
+        bias = generateBias(dir, 0);
     }
     return level;
 }

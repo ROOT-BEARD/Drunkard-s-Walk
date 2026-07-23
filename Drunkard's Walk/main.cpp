@@ -13,7 +13,14 @@ void drawLevel(int width, std::vector<int> level)
             std::cout << "\n";
         }
         // prints the number at the current indesdx of the level, the added spaces are for readablity
-        std::cout << level[i] << "  ";
+        if (level[i] == 1)
+        {
+            std::cout << "\033[33m" << level[i] << "\033[0m" << "  ";
+        }
+        else
+        {
+            std::cout << level[i] << "  ";
+        }
     }
 }
 
