@@ -15,7 +15,7 @@ void drawLevel(int width, std::vector<int> level)
         // prints the number at the current indesdx of the level, the added spaces are for readablity
         if (level[i] == 1)
         {
-            std::cout << "\033[33m" << level[i] << "\033[0m" << "  ";
+            std::cout << "\033[31m" << level[i] << "\033[0m" << "  ";
         }
         else
         {
@@ -42,5 +42,6 @@ int main()
     std::vector<int> level = generator.generateLevel(width, height, steps);
 
     drawLevel(width, level);
+    system("pause");
     return 0;
 }

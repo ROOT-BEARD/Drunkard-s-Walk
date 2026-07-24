@@ -38,6 +38,21 @@ std::vector<float> LevelGenerator::generateBias(int lastDir, float biaScale)
         break;
     }
 
+    switch (lastDir)
+    {
+    case 1:
+        upBias = 1.5;
+        break;
+    case 2:
+        downBias = 1.5;
+        break;
+    case 3:
+        leftBias = 1.5;
+        break;
+    case 4:
+        rightBias = 1.5;
+        break;
+    }
     return {upBias, downBias, leftBias, rightBias};
 }
 
@@ -45,6 +60,7 @@ std::vector<float> LevelGenerator::generateBias(int lastDir, float biaScale)
 (ex, 320pixel height level of 32 pixel tiles would be a height of 10).*/
 std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
 {
+    int curSteps = 0;
     if (width <= 0 || height <= 0)
     {
         return {};
@@ -59,7 +75,7 @@ std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
 
     std::vector<float> bias = {1, 1, 1, 1};
     int dir;
-    for (int i = 0; i < steps; i++)
+    while (curSteps < steps)
     {
         bool vaildMove = false;
         while (!vaildMove)
@@ -98,10 +114,16 @@ std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
                 }
                 break;
             }
+            if (!vaildMove)
+                bias = {1, 1, 1, 1};
         }
         // makes the current position of the dunkard into an open spot
-        level[(walkerPos.y * width) + walkerPos.x] = 1;
-        bias = generateBias(dir, 0);
+        if (level[(walkerPos.y * width) + walkerPos.x] == 0)
+        {
+            level[(walkerPos.y * width) + walkerPos.x] = 1;
+            curSteps += 1;
+        }
+        bias = generateBias(dir, 0.1);
     }
     return level;
 }
