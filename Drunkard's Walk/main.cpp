@@ -31,15 +31,25 @@ int main()
     int height;
     int width;
     int steps;
+    float backwardsBias;
+    float forwardsBias;
 
     std::cout << "Width: ";
     std::cin >> width;
+
     std::cout << "Height: ";
     std::cin >> height;
+
     std::cout << "Steps: ";
     std::cin >> steps;
 
-    std::vector<int> level = generator.generateLevel(width, height, steps);
+    std::cout << "BackwardsBias: ";
+    std::cin >> backwardsBias;
+
+    std::cout << "ForwardsBias: ";
+    std::cin >> forwardsBias;
+
+    std::vector<int> level = generator.generateLevel(width, height, steps, backwardsBias, forwardsBias);
 
     drawLevel(width, level);
     system("pause");

@@ -13,10 +13,10 @@ class LevelGenerator
 {
 private:
     int generateNum(const std::vector<float> &bias);
-    std::vector<float> generateBias(int lastDir, float biaScale);
+    std::vector<float> generateBias(int lastDir, float backwardsBias, float forwardsBias);
 
 public:
-    std::vector<int> generateLevel(int width, int height, int steps);
+    std::vector<int> generateLevel(int width, int height, int steps, float backwardsBias, float forwardBias);
 };
 
 #endif

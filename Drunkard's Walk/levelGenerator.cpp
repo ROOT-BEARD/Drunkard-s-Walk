@@ -6,7 +6,7 @@
 // generates and returns a random int between 1 and 4
 int LevelGenerator::generateNum(const std::vector<float> &bias)
 {
-    // random number generation
+    // random number generations
     static std::random_device rng;
     static auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     static std::mt19937 gen(rng() ^ seed);
@@ -14,7 +14,7 @@ int LevelGenerator::generateNum(const std::vector<float> &bias)
     return moveDist(gen) + 1;
 }
 
-std::vector<float> LevelGenerator::generateBias(int lastDir, float biaScale)
+std::vector<float> LevelGenerator::generateBias(int lastDir, float backwardsBias, float forwardsBias)
 {
 
     float upBias = 1;
@@ -25,32 +25,32 @@ std::vector<float> LevelGenerator::generateBias(int lastDir, float biaScale)
     switch (lastDir)
     {
     case 1:
-        downBias = biaScale;
+        downBias = backwardsBias;
         break;
     case 2:
-        upBias = biaScale;
+        upBias = backwardsBias;
         break;
     case 3:
-        rightBias = biaScale;
+        rightBias = backwardsBias;
         break;
     case 4:
-        leftBias = biaScale;
+        leftBias = backwardsBias;
         break;
     }
 
     switch (lastDir)
     {
     case 1:
-        upBias = 1.5;
+        upBias = forwardsBias;
         break;
     case 2:
-        downBias = 1.5;
+        downBias = forwardsBias;
         break;
     case 3:
-        leftBias = 1.5;
+        leftBias = forwardsBias;
         break;
     case 4:
-        rightBias = 1.5;
+        rightBias = forwardsBias;
         break;
     }
     return {upBias, downBias, leftBias, rightBias};
@@ -58,7 +58,7 @@ std::vector<float> LevelGenerator::generateBias(int lastDir, float biaScale)
 
 /* generates a level layout within the width and height of the desired level in tiles
 (ex, 320pixel height level of 32 pixel tiles would be a height of 10).*/
-std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
+std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps, float backwardsBias, float forwardsBias)
 {
     int curSteps = 0;
     if (width <= 0 || height <= 0)
@@ -123,7 +123,7 @@ std::vector<int> LevelGenerator::generateLevel(int width, int height, int steps)
             level[(walkerPos.y * width) + walkerPos.x] = 1;
             curSteps += 1;
         }
-        bias = generateBias(dir, 0.1);
+        bias = generateBias(dir, backwardsBias, forwardsBias);
     }
     return level;
 }
